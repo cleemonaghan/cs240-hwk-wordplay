@@ -3,8 +3,17 @@ var Root_Word_Length = 6;
 
 class WordPlay {
     constructor() {
+        //find word to use
+        let word = findWord()
+        //put characters of word into an array and shuffle it
+        this.availableLetters = []
+        for (let char of word) {
+            this.availableLetters.push(char);
+        }
+        shuffle(this.availableLetters)
+
         //create an array of all the subwords of the hiddenWord (this array contains the hiddenWord)
-        this.listOfWords = findSubwords(findWord());
+        this.listOfWords = findSubwords(word);
         //Create an array of booleans defining which words have been found
         this.foundWords = new Array();
         for(let i = 0; i < this.listOfWords.length; i++) {
@@ -40,11 +49,18 @@ class WordPlay {
 
     queryUser() {
         let guess = prompt("Enter a guess: ")
-        //if(guess == None) ...
+        //if the user gives up
+        if(guess == null) {
+
+        }
+        //if the user wants to shuffle the letters
+        if(guess == '*') {
+            
+        }
         guess = guess.toLowerCase();
-        //if the guess is too short, let the player know
+        //if the guess is too short or too long, let the player know
         if(guess.length < Min_Length) alert(`Guess is too short!`);
-        //if(guess.length > Root_Word_Length) alert(`Guess is too long!`);
+        else if(guess.length > Root_Word_Length) alert(`Guess is too long!`);
         //otherwise, check if it is a solution
         else {
             let found = false;
@@ -111,7 +127,7 @@ function findWord() {
 }
 
 function findSubwords(word) {
-    return ['cat', 'dog', 'bird', 'mouse']
+    return ['cat', 'hat', 'chat', 'catch']
 }
 
 
