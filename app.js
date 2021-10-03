@@ -4,7 +4,7 @@ var Min_Length = 3;
 
 
 
-class game {
+class WordPlay {
     constructor() {
         //A random word from words_alpha.js 
         this.hiddenWord = findWord();
@@ -46,9 +46,9 @@ class game {
 }
 
 function findWord() {
-    
+    return 'catch';
 }
 
 function findSubwords(word) {
-    
+    return ['cat', 'dog', 'bird', 'mouse']
 }
