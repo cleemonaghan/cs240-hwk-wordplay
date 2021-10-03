@@ -1,9 +1,5 @@
 var Min_Length = 3;
 
-
-
-
-
 class WordPlay {
     constructor() {
         //A random word from words_alpha.js 
@@ -18,7 +14,7 @@ class WordPlay {
     }
 
     queryUser() {
-
+        alert()
     }
 
     printStatus() {
@@ -33,11 +29,13 @@ class WordPlay {
 
         //print each word in the listOfSubwords (keeping the characters 
         //hidden if the word has not been found)
-        for(let i = 0; i < this.listOfSubwords; i++) {
+        for(let i = 0; i < this.listOfSubwords.length; i++) {
             if(this.foundWords[i]) console.log(this.listOfSubwords[i]);
             else {
                 let output = "";
-                this.listOfSubwords[i].forEach(char => {output = output + "- ";});
+                for (let char of this.listOfSubwords[i]) {
+                    output = output + "- ";
+                }
                 console.log(output);
             }
         }
@@ -52,3 +50,9 @@ function findWord() {
 function findSubwords(word) {
     return ['cat', 'dog', 'bird', 'mouse']
 }
+
+
+
+game = new WordPlay();
+game.printStatus();
+
