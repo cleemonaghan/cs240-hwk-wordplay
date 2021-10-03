@@ -107,6 +107,8 @@ class WordPlay {
         //print to the console the number of words we have found
         output += `You answered ${found} out of ${this.foundWords.length}!\n`;
 
+        output += `Available letters: ${this.availableLetters.join("")}\n`;
+
         //print each word in the listOfWords (keeping the characters 
         //hidden if the word has not been found)
         for(let i = 0; i < this.listOfWords.length; i++) {
