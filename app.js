@@ -26,9 +26,12 @@ class WordPlay {
         this.printStatus();
         while(!solved) {
             //get a word from the user
-            this.queryUser();
+            if(this.queryUser() == null) {
+                this.printStatus(true);
+                return;
+            }
             //update the console
-            this.printStatus();
+            this.printStatus(false);
 
             //check if the game is over
             let foundAllWords = true;
@@ -45,16 +48,16 @@ class WordPlay {
 
         //congratulate the player and terminate
         alert(`You guessed all the words! Good Job!`);
+        return;
     }
 
     queryUser() {
         let guess = prompt("Enter a guess: ")
-        //if the user gives up
+        //if the user gives up, return null
         if(guess == null) {
-
+            return null;
         }
 
-        
         guess = guess.toLowerCase();
         //if the user inputed '*', shuffle the available letters
         if(guess == '*') {
@@ -91,9 +94,10 @@ class WordPlay {
                 alert(`${guess} is not a word!`);
             }
         }
+        return true;
     }
 
-    printStatus() {
+    printStatus(gameOver) {
         //clear the console first
         console.clear();
 
@@ -104,22 +108,29 @@ class WordPlay {
             //if we have found this word, then increase the number of found words
             if(element) found++;
         });
-        //print to the console the number of words we have found
-        output += `You answered ${found} out of ${this.foundWords.length}!\n`;
+        //if the game is over, print to the console the number of words we have found
+        if(gameOver) {
+            output += `You answered ${found} out of ${this.foundWords.length}!\n\n`;
+            for(let word of this.listOfWords) {
+                output += (word + '\n');
+            }
+        }
+        //otherwise, print the available letters
+        else {
+            output += `Available letters: ${this.availableLetters.join("")}\n\n`;
 
-        output += `Available letters: ${this.availableLetters.join("")}\n`;
-
-        //print each word in the listOfWords (keeping the characters 
-        //hidden if the word has not been found)
-        for(let i = 0; i < this.listOfWords.length; i++) {
-            if(this.foundWords[i]) output += (this.listOfWords[i] + '\n');
-            else {
-                let line = "";
-                for (let char of this.listOfWords[i]) {
-                    line = line + "- ";
+            //print each word in the listOfWords (keeping the characters 
+            //hidden if the word has not been found)
+            for(let i = 0; i < this.listOfWords.length; i++) {
+                if(this.foundWords[i]) output += (this.listOfWords[i] + '\n');
+                else {
+                    let line = "";
+                    for (let char of this.listOfWords[i]) {
+                        line = line + "- ";
+                    }
+                    line += "\n"
+                    output += line;
                 }
-                line += "\n"
-                output += line;
             }
         }
         console.log(output);
