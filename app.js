@@ -18,6 +18,7 @@ class WordPlay {
     }
 
     printStatus() {
+        let output = ""
         //tally the number of words we have found 
         let found = 0;
         this.foundWords.forEach(element => {
@@ -25,20 +26,22 @@ class WordPlay {
             if(element) found++;
         });
         //print to the console the number of words we have found
-        console.log(`You answered ${found} out of ${this.foundWords.length}!\n`)
+        output += `You answered ${found} out of ${this.foundWords.length}!\n`;
 
         //print each word in the listOfSubwords (keeping the characters 
         //hidden if the word has not been found)
         for(let i = 0; i < this.listOfSubwords.length; i++) {
-            if(this.foundWords[i]) console.log(this.listOfSubwords[i]);
+            if(this.foundWords[i]) output += (this.listOfSubwords[i] + '\n');
             else {
-                let output = "";
+                let line = "";
                 for (let char of this.listOfSubwords[i]) {
-                    output = output + "- ";
+                    line = line + "- ";
                 }
-                console.log(output);
+                line += "\n"
+                output += line;
             }
         }
+        console.log(output);
 
     }
 }
