@@ -1,4 +1,5 @@
 var Min_Length = 3;
+var Root_Word_Length = 6;
 
 class WordPlay {
     constructor() {
@@ -11,10 +12,39 @@ class WordPlay {
         }
     }
 
+    playGame() {
+        let solved = false;
+        this.printStatus();
+        while(!solved) {
+            //get a word from the user
+            this.queryUser();
+            //update the console
+            this.printStatus();
+
+            //check if the game is over
+            let foundAllWords = true;
+            for(let i = 0; i < this.foundWords.length; i++) {
+                //if a single word is unfound, then the game is not over
+                if(!this.foundWords[i]) {
+                    foundAllWords = false;
+                    break;
+                }
+            }
+            solved = foundAllWords
+
+        }
+
+        //congratulate the player and terminate
+        alert(`You guessed all the words! Good Job!`);
+    }
+
     queryUser() {
-        let guess = prompt("Enter a guess: ").toLowerCase();
+        let guess = prompt("Enter a guess: ")
+        //if(guess == None) ...
+        guess = guess.toLowerCase();
         //if the guess is too short, let the player know
         if(guess.length < Min_Length) alert(`Guess is too short!`);
+        //if(guess.length > Root_Word_Length) alert(`Guess is too long!`);
         //otherwise, check if it is a solution
         else {
             let found = false;
@@ -87,9 +117,5 @@ function findSubwords(word) {
 
 
 game = new WordPlay();
-game.printStatus();
-game.queryUser();
-game.printStatus();
-game.queryUser();
-game.printStatus();
+game.playGame();
 
