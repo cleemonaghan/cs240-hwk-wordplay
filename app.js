@@ -53,13 +53,16 @@ class WordPlay {
         if(guess == null) {
 
         }
-        //if the user wants to shuffle the letters
-        if(guess == '*') {
-            
-        }
+
+        
         guess = guess.toLowerCase();
+        //if the user inputed '*', shuffle the available letters
+        if(guess == '*') {
+            alert(`Shuffling root word...`);
+            shuffle(this.availableLetters);
+        }
         //if the guess is too short or too long, let the player know
-        if(guess.length < Min_Length) alert(`Guess is too short!`);
+        else if(guess.length < Min_Length) alert(`Guess is too short!`);
         else if(guess.length > Root_Word_Length) alert(`Guess is too long!`);
         //otherwise, check if it is a solution
         else {
@@ -121,6 +124,32 @@ class WordPlay {
 
     }
 }
+
+/**
+ * This shuffle method uses the Fisher-Yates shuffle algorithm 
+ * to shuffle an inputed array.
+ * 
+ * @param {*} array The array to shuffle
+ * @returns The shuffled array
+ */
+function shuffle(array) {
+    let currentIndex = array.length;
+    let randomIndex = -1;
+  
+    // Go backwards through the array and swap each 
+    // element with another random index
+    while (currentIndex != 0) {
+  
+      // Select a random element
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+  
+      // swap it with the current element
+      [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+    }
+  
+    return array;
+  }
 
 function findWord() {
     return 'catch';
