@@ -14,11 +14,8 @@ class WordPlay {
 
         //create an array of all the subwords of the hiddenWord (this array contains the hiddenWord)
         this.listOfWords = findSubwords(word);
-        //Create an array of booleans defining which words have been found
-        this.foundWords = new Array();
-        for(let i = 0; i < this.listOfWords.length; i++) {
-            this.foundWords.push(false);
-        }
+        //Create a set of the words that have been found
+        this.foundWords = new Set();
     }
 
     playGame() {
@@ -102,18 +99,11 @@ class WordPlay {
         console.clear();
 
         let output = ""
-        //tally the number of words we have found 
-        let found = 0;
-        this.foundWords.forEach(element => {
-            //if we have found this word, then increase the number of found words
-            if(element) found++;
-        });
         //if the game is over, print to the console the number of words we have found
         if(gameOver) {
-            output += `You answered ${found} out of ${this.foundWords.length}!\n\n`;
-            for(let word of this.listOfWords) {
-                output += (word + '\n');
-            }
+            output += `You answered ${this.foundWords.size} out of ${this.listOfWords.size}!\n\n`;
+            this.listOfWords.foreach((word) => {output += (word + '\n')});
+            
         }
         //otherwise, print the available letters
         else {
@@ -121,8 +111,8 @@ class WordPlay {
 
             //print each word in the listOfWords (keeping the characters 
             //hidden if the word has not been found)
-            for(let i = 0; i < this.listOfWords.length; i++) {
-                if(this.foundWords[i]) output += (this.listOfWords[i] + '\n');
+            this.listOfWords.foreach((word) => {
+                if(this.foundWords.has(word)) output += (word + '\n');
                 else {
                     let line = "";
                     for (let char of this.listOfWords[i]) {
@@ -131,7 +121,7 @@ class WordPlay {
                     line += "\n"
                     output += line;
                 }
-            }
+            });
         }
         console.log(output);
 
@@ -169,6 +159,11 @@ function findWord() {
 }
 
 function findSubwords(word) {
+
+
+
+
+
     return ['cat', 'hat', 'chat', 'catch']
 }
 
