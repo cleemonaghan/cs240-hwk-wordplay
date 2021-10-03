@@ -31,15 +31,7 @@ class WordPlay {
             this.printStatus(false);
 
             //check if the game is over
-            let foundAllWords = true;
-            for(let i = 0; i < this.foundWords.length; i++) {
-                //if a single word is unfound, then the game is not over
-                if(!this.foundWords[i]) {
-                    foundAllWords = false;
-                    break;
-                }
-            }
-            solved = foundAllWords
+            solved = (this.listOfWords.size == this.foundWords.size);
 
         }
 
@@ -65,32 +57,24 @@ class WordPlay {
         else if(guess.length < Min_Length) alert(`Guess is too short!`);
         else if(guess.length > Root_Word_Length) alert(`Guess is too long!`);
         //otherwise, check if it is a solution
-        else {
-            let found = false;
-            for(let index=0; index<this.listOfWords.length;index++) {
-                if(guess == this.listOfWords[index]) {
-
-                    if(this.foundWords[index]) {
-                        //We already guessed this word, so inform the player
-                        alert(`Already guessed ${guess}!`);
-                    }
-                    else {
-                        //this was a correct guess, so update foundWords
-                        this.foundWords[index] = true;
-                        //give a message that the guess was correct
-                        alert(`Correct! ${guess}`);
-
-                    }
-                    //change found to true
-                    found = true;
-                    break;
+        else if(this.listOfWords.has(guess)) {
+            if(this.foundWords.has(guess)) {
+                //We already guessed this word, so inform the player
+                alert(`Already guessed ${guess}!`);
+            }
+            else {
+                //this was a correct guess, so update foundWords
+                this.foundWords.add(guess);
+                //give a message that the guess was correct
+                alert(`Correct! ${guess}`);
                 }
+                
             }
-            if(!found) {
-                //If we didn't find the word
-                alert(`${guess} is not a word!`);
-            }
+        else {
+            //If we didn't find the word
+            alert(`${guess} is not a word!`);
         }
+        
         return true;
     }
 
@@ -102,7 +86,7 @@ class WordPlay {
         //if the game is over, print to the console the number of words we have found
         if(gameOver) {
             output += `You answered ${this.foundWords.size} out of ${this.listOfWords.size}!\n\n`;
-            this.listOfWords.foreach((word) => {output += (word + '\n')});
+            this.listOfWords.forEach((word) => {output += (word + '\n')});
             
         }
         //otherwise, print the available letters
@@ -111,11 +95,11 @@ class WordPlay {
 
             //print each word in the listOfWords (keeping the characters 
             //hidden if the word has not been found)
-            this.listOfWords.foreach((word) => {
+            this.listOfWords.forEach((word) => {
                 if(this.foundWords.has(word)) output += (word + '\n');
                 else {
                     let line = "";
-                    for (let char of this.listOfWords[i]) {
+                    for (let char of word) {
                         line = line + "- ";
                     }
                     line += "\n"
@@ -161,10 +145,13 @@ function findWord() {
 function findSubwords(word) {
 
 
+    let set = new Set();
+    set.add('cat')
+    set.add('hat')
+    set.add('chat')
+    set.add('catch')
 
-
-
-    return ['cat', 'hat', 'chat', 'catch']
+    return set;
 }
 
 
