@@ -1,11 +1,14 @@
 var Min_Length = 3;
 var Root_Word_Length = 6;
+var Root_Word_List = new Set();
+var Word_List = new Set();
 
 class WordPlay {
     constructor() {
         //find word to use
         let word = findWord()
         //put characters of word into an array and shuffle it
+        //this.availableLetters = word.split()
         this.availableLetters = []
         for (let char of word) {
             this.availableLetters.push(char);
@@ -139,23 +142,67 @@ function shuffle(array) {
   }
 
 function findWord() {
+    //select a random word from Root_Word_List
     return 'catch';
 }
 
 function findSubwords(word) {
 
-
-    let set = new Set();
-    set.add('cat')
-    set.add('hat')
-    set.add('chat')
-    set.add('catch')
+    //create a set of all the possible permutations of the word
+    let set = permutations(word);
+    
+    //remove all the permutations that are less than 3 chars and not in Word_List
+    set.forEach(subWord => {
+        if(subWord < 3) set.delete(subWord);
+        else if(!Word_List.has(subWord)) set.delete(subWord);
+    });
 
     return set;
 }
 
 
+function permutations(word) {
 
+    if (0 == word.length) return new Set().add("");
+
+    
+    let firstLetter = word[0];
+    //find all permutations of the subword (indices 1 -> n)
+    let subSet = permutations(word.substring(1));
+    let set = new Set();
+
+    //need to convert subSet to an iterable so we can traverse all the elements of the set
+    let setIterator = subSet.values()
+    
+    element = setIterator.next();
+    while(!element.done) {
+        //need to convert subSet to an array or iterable!!!
+        let tempWord = element.value;
+        for (let i = 0; i <= tempWord.length; i++) {
+            let frontHalf = tempWord.substring(-1, i);
+            let backHalf = tempWord.substring(i);
+            set.add(frontHalf + firstLetter + backHalf);
+        }
+        set.add(tempWord);
+        element = setIterator.next();
+    }
+    return set;
+}
+
+
+function initializeLists() {
+    console.log(dictionary);
+    for(let index in dictionary) {
+        let word = dictionary[index]
+        if(word.length <= 6 && word.length >= 3) Word_List.add(word);
+        if(word.length == 6) Root_Word_List.add(word);
+    }
+}
+
+
+initializeLists();
 game = new WordPlay();
 game.playGame();
+
+
 
