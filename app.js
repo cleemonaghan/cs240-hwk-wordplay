@@ -1,9 +1,21 @@
+//the minimum length of a word in the game
 var Min_Length = 3;
+//the maximum length of a root word
 var Root_Word_Length = 6;
+//contains all the possibble starter words for the WordPlay game
 var Root_Word_List = new Array();
+//contains all words in the dictionary (words of length 3 through length 6)
 var Word_List = new Set();
 
+/***
+ * This class contains the fields and methods for playing the WoldPlay game. 
+ */
 class WordPlay {
+    /** This constructor initializes the class's fields:
+     * this.availableLetters- an array of characters that make up the 6-letter root word
+     * this.listOfWords- the set of words and subwords that can be formed from the 6-letter root word
+     * this.foundWords- the set of words the player has found
+     */
     constructor() {
         //find word to use
         let word = findWord()
@@ -20,16 +32,28 @@ class WordPlay {
         this.foundWords = new Set();
     }
 
+    /** This method simulates the game for the user. Each turn, 
+     * if the game is not over, the player will be queried for 
+     * a new guess and then the game status will be updated and 
+     * printed to the console. If the player guesses all the 
+     * words in listOfWords, or if they give up, the game will end. 
+     * 
+     * @returns None is returned when the game is finished
+     */
     playGame() {
+        //solved is a boolean that will be set to true when the game is over
         let solved = false;
+        //print the initial status of the game
         this.printStatus();
+        //enter the game loop
         while(!solved) {
             //get a word from the user
             if(this.queryUser() == null) {
+                //the player gave up, so print the game over status to the console
                 this.printStatus(true);
                 return;
             }
-            //update the console
+            //update and print the current game status to the console
             this.printStatus(false);
 
             //check if the game is over
@@ -42,6 +66,19 @@ class WordPlay {
         return;
     }
 
+    /** This method queries the player for a guess. If they enter *, 
+     * then the letters shown will be shuffled. If they enter a word 
+     * with more than 6 letters or less than 3, they will be informed 
+     * that the entered word is too long or too short. If they enter 
+     * a word that they have already guessed, they will be reminded 
+     * that they already guessed that word. If they guess correctly 
+     * or incorrectly, they will be informed that the word they entered 
+     * was correct or incorrect. 
+     * If the player cancels the prompt, the game will end and 
+     * they will have given up. 
+     * 
+     * @returns null if the player gives up, true otherwise
+     */
     queryUser() {
         let guess = prompt("Enter a guess: ")
         //if the user gives up, return null
@@ -80,6 +117,17 @@ class WordPlay {
         return true;
     }
 
+    /** This method prints the status of the game to the console. 
+     * The console will be cleared and then the status of the game will be printed. 
+     * The game status consists of the letters available to guess with and the list 
+     * of words to be guessed. If a word has not been guessed, the letters of the 
+     * word will be replaced with dashes, so that the player knows how many letters 
+     * are in the word, but not the letters of the word.
+     * At the end of the game, the number of correctly answered words will be printed, 
+     * along with all the hidden words in Word_List.
+     * 
+     * @param {Boolean} gameOver true if the game is over
+     */
     printStatus(gameOver) {
         //clear the console first
         console.clear();
@@ -109,16 +157,16 @@ class WordPlay {
                 }
             });
         }
+        //print the status of the game to the console
         console.log(output);
 
     }
 }
 
-/**
- * This shuffle method uses the Fisher-Yates shuffle algorithm 
+/**This shuffle method uses the Fisher-Yates shuffle algorithm 
  * to shuffle an inputed array.
  * 
- * @param {*} array The array to shuffle
+ * @param {Array} array The array to shuffle
  * @returns The shuffled array
  */
 function shuffle(array) {
@@ -140,11 +188,21 @@ function shuffle(array) {
     return array;
   }
 
+/** This method selects a random 6-letter word from Root_Word_List to play the game with
+ */
 function findWord() {
     //select a random word from Root_Word_List
     return Root_Word_List[Math.floor(Math.random() * Root_Word_List.length)];
 }
 
+/** This method finds all the valid subwords (between 3 and 6 letters long) of the inputed word.
+ * 
+ * This method first creates a set of all the possible permutations of the inputed words, 
+ * then removes all the invalid words from the set.
+ * 
+ * @param {String} word the word to find all the subwords of
+ * @returns A set of valid subwords
+ */
 function findSubwords(word) {
 
     //create a set of all the possible permutations of the word
@@ -159,46 +217,59 @@ function findSubwords(word) {
     return set;
 }
 
-
+/** This method uses recursion to find all the permutations of the inputed word.
+ * 
+ * @param {String} word the word to find all the permutations of
+ * @returns A set of all possible permutations of the word
+ */
 function permutations(word) {
 
+    //if the word is the empty string, add it to the set
     if (0 == word.length) return new Set().add("");
 
-    
+    //remember the first letter of the word
     let firstLetter = word[0];
-    //find all permutations of the subword (indices 1 -> n)
+    //recursively find all permutations of the subword (indices 1 -> n) and store them in subSet
     let subSet = permutations(word.substring(1));
+    //the set to store all our final permutations in
     let set = new Set();
 
-    //need to convert subSet to an iterable so we can traverse all the elements of the set
+    //convert subSet to an iterable so we can traverse all the elements of the set
     let setIterator = subSet.values()
-    
+    //element is the current word of subSet as we traverse it
     element = setIterator.next();
     while(!element.done) {
-        //need to convert subSet to an array or iterable!!!
+        //insert the first letter of the word between every pair of letters in the word
         let tempWord = element.value;
         for (let i = 0; i <= tempWord.length; i++) {
             let frontHalf = tempWord.substring(-1, i);
             let backHalf = tempWord.substring(i);
+            //add the permutation to the final set
             set.add(frontHalf + firstLetter + backHalf);
         }
+        //add the permutation from subSet to the final set
         set.add(tempWord);
         element = setIterator.next();
     }
+    //return the set of permutations
     return set;
 }
 
-
+/**This function initializes the Word_List and Root_Word_List for the WordPlay game.
+ */
 function initializeLists() {
-    console.log(dictionary);
+    //for each word in the dictionary
     for(let index in dictionary) {
         let word = dictionary[index]
-        if(word.length <= 6 && word.length >= 3) Word_List.add(word);
-        if(word.length == 6) Root_Word_List.push(word);
+        //check if we need to add it to the Word_List
+        if(word.length <= Root_Word_Length && word.length >= Min_Length) Word_List.add(word);
+        //check if we need to add it to the Root_Word_List
+        if(word.length == Root_Word_Length) Root_Word_List.push(word);
     }
 }
 
 
+//intialize the Word_List and Root_Word_List, then begin a game of WordPlay
 initializeLists();
 game = new WordPlay();
 game.playGame();
