@@ -1,6 +1,6 @@
 var Min_Length = 3;
 var Root_Word_Length = 6;
-var Root_Word_List = new Set();
+var Root_Word_List = new Array();
 var Word_List = new Set();
 
 class WordPlay {
@@ -8,7 +8,6 @@ class WordPlay {
         //find word to use
         let word = findWord()
         //put characters of word into an array and shuffle it
-        //this.availableLetters = word.split()
         this.availableLetters = []
         for (let char of word) {
             this.availableLetters.push(char);
@@ -143,7 +142,7 @@ function shuffle(array) {
 
 function findWord() {
     //select a random word from Root_Word_List
-    return 'catch';
+    return Root_Word_List[Math.floor(Math.random() * Root_Word_List.length)];
 }
 
 function findSubwords(word) {
@@ -195,7 +194,7 @@ function initializeLists() {
     for(let index in dictionary) {
         let word = dictionary[index]
         if(word.length <= 6 && word.length >= 3) Word_List.add(word);
-        if(word.length == 6) Root_Word_List.add(word);
+        if(word.length == 6) Root_Word_List.push(word);
     }
 }
 
